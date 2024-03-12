@@ -681,69 +681,31 @@ void driveStrightWithGyro(int millsecond)
 { 
   readGyro();
   float target =  currentAngle;
-  float torlance = 50; // degree
-  float directionMinus = 0;
-  float directionPlus = 0;
+  float torlance = 10; // degree
   unsigned long timeAtDestination = millis() + millsecond;
 
   while (millis() < timeAtDestination)
   {
     readGyro();
+    SerialCom->print(currentAngle);
+    SerialCom->print(" ");
 
     if((abs(currentAngle) < torlance) ||(abs(currentAngle) > (360-torlance)))
     {
       forward();
+      SerialCom->println("forward");
     }
-    else if(currentAngle > torlance)
+    else if((currentAngle > torlance)&&(currentAngle < 90))
     {
-      cw();
+      ccw();
+      SerialCom->println("ccw");
     }
     else
     {
-      ccw();
+      cw();
+      SerialCom->println("cw");
     }
 
-    readGyro();
-    delay(200);
-
-    // if((target - torlance)<0){
-    //   directionMinus = target - torlance +360;
-    // }
-
-    // if(( target + torlance) >360){
-    //   directionPlus = target + torlance -360;
-    // }
-
-    // SerialCom->println("Current Angle");
-    // SerialCom->print(currentAngle);
-    // SerialCom->print("Target");   
-
-    // SerialCom->print(target); 
-    //     SerialCom->print("directionPlus");
-    // SerialCom->print(directionPlus);
-    // SerialCom->print("directionMinus");    
-    // SerialCom->print(directionMinus);
-
-    
-    // if (currentAngle > directionPlus)
-    // {
-    //   // turn left
-    //   SerialCom->println("ccw");
-    //   ccw();
-    // }
-    // else if (currentAngle < directionMinus)
-    // {
-    //   // turn right
-    //   SerialCom->println("cw");
-    //   cw();
-    // }
-    // else
-    // {
-    //   // go stright
-    //   SerialCom->println("forward");
-    //   forward();
-    // }
-
-    // delay(200);
+    delay(40);
   }
 }
